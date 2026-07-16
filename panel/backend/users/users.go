@@ -2,6 +2,7 @@ package users
 
 import (
 	"pz-velocity-vpn/backend/database"
+	"pz-velocity-vpn/backend/utils"
 )
 
 
@@ -10,21 +11,25 @@ type User struct {
 	ID int
 	Username string
 	UUID string
-	VolumeLimit int
-	VolumeUsed int
-	ExpireDate string
 	Status string
 
 }
 
 
-func Create(username string, uuid string) error {
+func Create(username string) (string,error){
+
+	uuid := utils.GenerateUUID()
 
 
-	_, err := database.DB.Exec(
+	_,err := database.DB.Exec(
 		`
 		INSERT INTO users
-		(username,uuid,volume_limit,status)
+		(
+		username,
+		uuid,
+		volume_limit,
+		status
+		)
 		VALUES(?,?,?,?)
 		`,
 		username,
@@ -33,5 +38,7 @@ func Create(username string, uuid string) error {
 		"active",
 	)
 
-	return err
+
+	return uuid,err
+
 }
