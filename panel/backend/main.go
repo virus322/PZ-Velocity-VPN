@@ -17,7 +17,6 @@ type Status struct {
 
 func main() {
 
-	// Initialize Database
 	err := database.Init()
 
 	if err != nil {
@@ -25,7 +24,6 @@ func main() {
 	}
 
 
-	// API Status
 	http.HandleFunc("/api/status", func(w http.ResponseWriter, r *http.Request) {
 
 		response := Status{
@@ -34,25 +32,27 @@ func main() {
 			Status:  "running",
 		}
 
-
-		w.Header().Set(
-			"Content-Type",
-			"application/json",
-		)
-
+		w.Header().Set("Content-Type", "application/json")
 
 		json.NewEncoder(w).Encode(response)
 	})
 
 
-	// Users API
+	// List users
 	http.HandleFunc(
 		"/api/users",
 		api.ListUsers,
 	)
 
 
-	log.Println("PZ Velocity VPN API running on :1196")
+	// Create user
+	http.HandleFunc(
+		"/api/users/create",
+		api.CreateUser,
+	)
+
+
+	log.Println("PZ Velocity VPN running on port 1196")
 
 
 	err = http.ListenAndServe(
@@ -64,4 +64,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
