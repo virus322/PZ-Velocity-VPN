@@ -1,0 +1,23 @@
+[Unit]
+
+Description=PZ Velocity VPN
+
+After=network.target
+
+
+
+[Service]
+
+Type=simple
+
+WorkingDirectory=/opt/pz-velocity
+
+ExecStart=/opt/pz-velocity/pz-velocity
+
+Restart=always
+
+
+
+[Install]
+
+WantedBy=multi-user.target
