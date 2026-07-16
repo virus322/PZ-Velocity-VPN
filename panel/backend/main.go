@@ -1,3 +1,7 @@
+import (
+    "pz-velocity-vpn/backend/database"
+    "pz-velocity-vpn/backend/api"
+)
 package main
 
 import (
