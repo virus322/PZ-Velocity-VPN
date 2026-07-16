@@ -1,12 +1,12 @@
-import (
-    "pz-velocity-vpn/backend/database"
-    "pz-velocity-vpn/backend/api"
-)
 package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+
+	"pz-velocity-vpn/backend/api"
+	"pz-velocity-vpn/backend/database"
 )
 
 type Status struct {
@@ -17,6 +17,15 @@ type Status struct {
 
 func main() {
 
+	// Initialize Database
+	err := database.Init()
+
+	if err != nil {
+		log.Fatal("Database error:", err)
+	}
+
+
+	// API Status
 	http.HandleFunc("/api/status", func(w http.ResponseWriter, r *http.Request) {
 
 		response := Status{
@@ -25,11 +34,34 @@ func main() {
 			Status:  "running",
 		}
 
-		w.Header().Set("Content-Type", "application/json")
+
+		w.Header().Set(
+			"Content-Type",
+			"application/json",
+		)
+
 
 		json.NewEncoder(w).Encode(response)
 	})
 
 
-	http.ListenAndServe(":8080", nil)
+	// Users API
+	http.HandleFunc(
+		"/api/users",
+		api.ListUsers,
+	)
+
+
+	log.Println("PZ Velocity VPN API running on :1196")
+
+
+	err = http.ListenAndServe(
+		":1196",
+		nil,
+	)
+
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
