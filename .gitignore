@@ -1,0 +1,15 @@
+# Logs
+*.log
+
+# Database
+*.db
+
+# Config secrets
+.env
+
+# System
+.DS_Store
+
+# Build
+build/
+dist/
